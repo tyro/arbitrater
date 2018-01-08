@@ -49,7 +49,7 @@ The options below can be applied either per-instance, or globally.
 
 To customise per-instance, call '`arbitrater()`', which provides a fluent API for configuration.
 
-To customise globally, either use the `DefaultConfiguration` object or provide a boostrap configuration. (See the next section) 
+To customise globally, either use the `DefaultConfiguration` object or provide a bootstrap configuration. (See the next section) 
 
 #### Customising generated instances
 
@@ -76,7 +76,7 @@ It is possible to create a bootstrap configuration file that will configure Arbi
    * Set a priority. If there are multiple bootstrap configurations with overlapping settings, the highest priority wins.
    * In the method `bootstrapConfiguration()`, register any generators you require. You can also change the default settings.
 2. Create the directory META-INF/services
-3. Add a file to this directory. The name doesn't matter. 
+3. Add a file called 'com.tyro.oss.arbitrater.ArbitraterInitializer' to this directory 
 4. Add a single line to the file with the 'binary name' of your implementing class. In many cases this will be the fully qualified class name.
 5. That's it - your code will be executed once, the first time an arbitrary instance is generated.  
 
