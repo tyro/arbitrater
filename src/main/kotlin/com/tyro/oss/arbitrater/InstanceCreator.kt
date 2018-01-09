@@ -44,6 +44,8 @@ class InstanceCreator<out T : Any>(private val targetClass: KClass<T>, settings:
      * Create an arbitrary instance, or else explode
      */
     fun createInstance(): T {
+        validateConstructor()
+
         try {
             val primaryConstructor = targetClass.primaryConstructor!!
 
@@ -56,6 +58,14 @@ class InstanceCreator<out T : Any>(private val targetClass: KClass<T>, settings:
             return primaryConstructor.callBy(constructorArguments)
         } catch (e: Exception) {
             throw RuntimeException("Could not generate random value for class [${targetClass.qualifiedName}]", e)
+        }
+    }
+
+    private fun validateConstructor() {
+        requireNotNull(targetClass.primaryConstructor) {
+            """
+            Target class [${targetClass.qualifiedName}] has no primary constructor. This is probably a Java class. Call 'registerGenerator' to supply an instance generator.
+            """
         }
     }
 
