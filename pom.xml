@@ -22,7 +22,7 @@
 
     <groupId>com.tyro.oss</groupId>
     <artifactId>arbitrater</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
