@@ -2,7 +2,7 @@
 
 Arbitrater is a library for creating arbitrary instances of classes by reflection,
 for example to use in testing. It was designed primarily for use with Kotlin 'data classes', 
-but may work regular classes too.
+but may work with regular classes too.
 
 It is similar to libraries like [random-beans](https://github.com/benas/random-beans) and
 [podam](https://devopsfolks.github.io/podam/), but with support for nullable types and default values. 
