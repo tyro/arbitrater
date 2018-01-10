@@ -22,8 +22,15 @@
 
     <groupId>com.tyro.oss</groupId>
     <artifactId>arbitrater</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.2</version>
     <packaging>jar</packaging>
+
+    <scm>
+        <connection>scm:git:https://github.com/tyro/arbitrater.git</connection>
+        <developerConnection>scm:git:https://github.com/tyro/arbitrater.git</developerConnection>
+        <url>https://github.com/tyro/arbitrater</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <name>${project.groupId}:${project.artifactId}</name>
 
