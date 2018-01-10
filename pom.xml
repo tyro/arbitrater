@@ -24,6 +24,8 @@
     <artifactId>arbitrater</artifactId>
     <version>0.0.2</version>
     <packaging>jar</packaging>
+    <url>https://github.com/tyro/arbitrater</url>
+    <description>A simple library to generate arbitrary instances of Kotlin classes</description>
 
     <scm>
         <connection>scm:git:https://github.com/tyro/arbitrater.git</connection>
