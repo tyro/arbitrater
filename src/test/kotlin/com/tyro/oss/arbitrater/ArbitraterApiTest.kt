@@ -62,4 +62,19 @@ class ArbitraterApiTest {
             instance.int shouldNotBe 10
         }
     }
+
+    @Test
+    fun `convenience method 'withTheWorks' will not generate nulls and generates values for default types`() {
+        val arbitraryInstances = (1..100).map {
+            NullableAndDefaultValues::class.arbitraryInstanceWithAllPropertiesRandomized()
+        }
+
+        forAtLeast(1, arbitraryInstances) { instance ->
+            instance.int shouldNotBe 10
+        }
+
+        forAll(arbitraryInstances) { instance ->
+            instance.date shouldNotBe null
+        }
+    }
 }

@@ -16,10 +16,7 @@
 
 package com.tyro.oss.arbitrater
 
-import com.tyro.oss.randomdata.RandomBoolean
-import com.tyro.oss.randomdata.RandomLocalDate
-import com.tyro.oss.randomdata.RandomLocalDateTime
-import com.tyro.oss.randomdata.RandomString
+import com.tyro.oss.randomdata.*
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
@@ -47,7 +44,8 @@ object DefaultConfiguration : ConfigurableArbitrater() {
         registerGenerator(RandomString::randomString)
         registerGenerator(::randomKotlinString)
         registerGenerator(RandomLocalDate::randomLocalDate)
-        registerGenerator(RandomLocalDateTime::randomDateTime)
+        registerGenerator(RandomLocalDateTime::randomLocalDateTime)
+        registerGenerator(RandomZonedDateTime::randomZonedDateTime)
         registerGenerator(UUID::randomUUID)
         registerGenerator { BigInteger.valueOf(random.nextLong()) }
         registerGenerator { BigDecimal.valueOf(random.nextDouble()) }

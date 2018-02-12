@@ -20,6 +20,7 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -39,9 +40,12 @@ data class DefaultValue(val int: Int = 10)
 
 data class NullableValue(val date: LocalDate?)
 
+data class NullableAndDefaultValues(val date: LocalDate? = null, val int: Int = 10)
+
 data class Dates(
         val localDate: LocalDate,
-        val localDateTime: LocalDateTime
+        val localDateTime: LocalDateTime,
+        val zonedDateTime: ZonedDateTime
 )
 
 data class BigNumbers(
