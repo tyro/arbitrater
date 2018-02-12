@@ -17,9 +17,7 @@
 package com.tyro.oss.arbitrater
 
 import com.tyro.oss.randomdata.RandomEnum
-import kotlin.reflect.KClass
-import kotlin.reflect.KType
-import kotlin.reflect.KTypeProjection
+import kotlin.reflect.*
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubtypeOf
 import kotlin.reflect.full.primaryConstructor
@@ -36,9 +34,19 @@ private val wildcardEnumType = Enum::class.createType(arguments = listOf(KTypePr
 class InstanceCreator<out T : Any>(private val targetClass: KClass<T>, settings: GeneratorSettings = GeneratorSettings())
     : ConfigurableArbitrater(settings, DefaultConfiguration.generators.toMutableMap()) {
 
+    private val specificValues: MutableMap<KParameter, Any> = mutableMapOf()
+
     fun generateNulls(value: Boolean = true): InstanceCreator<T> = InstanceCreator(targetClass, settings.copy(generateNulls = value))
 
     fun useDefaultValues(value: Boolean = false): InstanceCreator<T> = InstanceCreator(targetClass, settings.copy(useDefaultValues = value))
+
+    fun withValue(parameterName: String, value: Any): InstanceCreator<T> {
+        targetClass.primaryConstructor?.parameters?.find { it.name == parameterName }?.let {
+            specificValues[it] = value
+        } ?: throw IllegalArgumentException("Parameter named $parameterName not found in primary constructor of ${targetClass.simpleName}")
+
+        return this
+    }
 
     /**
      * Create an arbitrary instance, or else explode
@@ -52,7 +60,7 @@ class InstanceCreator<out T : Any>(private val targetClass: KClass<T>, settings:
             val constructorArguments = primaryConstructor
                     .parameters
                     .filterNot { it.isOptional && settings.useDefaultValues }
-                    .map { it to it.type.randomValue() }
+                    .map { it to (specificValues[it] ?:  it.type.randomValue()) }
                     .toMap()
 
             return primaryConstructor.callBy(constructorArguments)

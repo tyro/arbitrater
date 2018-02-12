@@ -17,6 +17,9 @@
 package com.tyro.oss.arbitrater
 
 import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.test.fail
 
 class InstanceCreatorTest {
 
@@ -109,4 +112,55 @@ class InstanceCreatorTest {
         val instance = MapsOfDtos::class.arbitraryInstance()
         println(instance)
     }
+
+    @Test
+    fun `can apply specific values to name parameters`() {
+        val specificValue = "Tyro"
+        val instance = TestClass::class.arbitrater().withValue("property1", specificValue).createInstance()
+
+        assertEquals(specificValue, instance.property1)
+        assertNotEquals(specificValue, instance.property2)
+    }
+
+    @Test
+    fun `should throw straight away if name is not a constructor param`() {
+        val specificValue = "Tyro"
+        try {
+            NestingTestClass::class.arbitrater().withValue("property7", specificValue)
+            fail("Should have thrown IAE")
+        } catch (e: IllegalArgumentException) {
+            // expected
+        }
+    }
+
+    @Test
+    fun `should not apply specific value to nested instances`() {
+        val specificValue = "Tyro"
+        val instance = NestingTestClass::class.arbitrater().withValue("property1", specificValue).createInstance()
+
+        assertEquals(specificValue, instance.property1)
+        assertNotEquals(specificValue, instance.nested.property1)
+    }
+
+    @Test
+    fun `specific parameter values should not be propagated across InstanceCreator instances`() {
+        val specificValue = "Tyro"
+        val instance1 = TestClass::class.arbitrater().withValue("property1", specificValue).createInstance()
+        val instance2 = TestClass::class.arbitrater().createInstance()
+
+        assertEquals(specificValue, instance1.property1)
+        assertNotEquals(specificValue, instance2.property1)
+    }
+
+    @Test
+    fun `can use a specific parameter value that's not a property`() {
+        val instance = ClassWithoutConstructorProperty::class.arbitrater().withValue("name", "Boy").createInstance()
+        assertEquals("Big Boy", instance.bigName)
+    }
+}
+
+class TestClass(val property1: String, val property2: String)
+class NestingTestClass(val nested: TestClass, val property1: String)
+class ClassWithoutConstructorProperty(name: String) {
+    val bigName = "Big " + name
 }
