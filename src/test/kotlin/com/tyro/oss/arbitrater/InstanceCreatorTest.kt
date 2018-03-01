@@ -19,6 +19,7 @@ package com.tyro.oss.arbitrater
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+import kotlin.test.assertNull
 import kotlin.test.fail
 
 class InstanceCreatorTest {
@@ -114,11 +115,20 @@ class InstanceCreatorTest {
     }
 
     @Test
-    fun `can apply specific values to name parameters`() {
+    fun `can apply specific values to named parameters`() {
         val specificValue = "Tyro"
         val instance = TestClass::class.arbitrater().withValue("property1", specificValue).createInstance()
 
         assertEquals(specificValue, instance.property1)
+        assertNotEquals(specificValue, instance.property2)
+    }
+
+    @Test
+    fun `can apply null values to named parameters`() {
+        val specificValue: String? = null
+        val instance = TestClass::class.arbitrater().withValue("property1", specificValue).createInstance()
+
+        assertNull(instance.property1)
         assertNotEquals(specificValue, instance.property2)
     }
 
@@ -159,7 +169,7 @@ class InstanceCreatorTest {
     }
 }
 
-class TestClass(val property1: String, val property2: String)
+class TestClass(val property1: String?, val property2: String)
 class NestingTestClass(val nested: TestClass, val property1: String)
 class ClassWithoutConstructorProperty(name: String) {
     val bigName = "Big " + name
