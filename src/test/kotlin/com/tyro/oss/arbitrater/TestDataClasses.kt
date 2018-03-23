@@ -40,6 +40,8 @@ data class DefaultValue(val int: Int = 10)
 
 data class NullableValue(val date: LocalDate?)
 
+data class NestedTypesWithNullableAndDefaultValues(val defaultValue: DefaultValue, val nullableValue: NullableValue)
+
 data class NullableAndDefaultValues(val date: LocalDate? = null, val int: Int = 10)
 
 data class Dates(

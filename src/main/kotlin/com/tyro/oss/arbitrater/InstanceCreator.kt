@@ -86,7 +86,7 @@ class InstanceCreator<out T : Any>(private val targetClass: KClass<T>, settings:
             isSubtypeOf(wildcardCollectionType) -> fillCollection(this)
             isSubtypeOf(wildcardMapType) -> fillMap(this)
             isSubtypeOf(wildcardEnumType) -> RandomEnum.randomEnumValue((classifier as KClass<Enum<*>>).java)
-            classifier is KClass<*> -> InstanceCreator(classifier as KClass<*>).createInstance()
+            classifier is KClass<*> -> InstanceCreator(classifier as KClass<*>, settings).createInstance()
             else -> TODO("No support for ${this}")
         }
     }

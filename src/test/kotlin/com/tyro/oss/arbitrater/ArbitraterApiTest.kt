@@ -64,7 +64,25 @@ class ArbitraterApiTest {
     }
 
     @Test
-    fun `convenience method 'withTheWorks' will not generate nulls and generates values for default types`() {
+    fun `null and default type options propagate when generating nested classes`() {
+        val instances = (1..10).map {
+            NestedTypesWithNullableAndDefaultValues::class.arbitrater()
+                    .generateNulls(true)
+                    .useDefaultValues(false)
+                    .createInstance()
+        }
+
+        forAtLeast(1, instances) {
+            it.defaultValue.int shouldNotBe 10
+        }
+
+        forAll(instances) {
+            it.nullableValue.date shouldBe null
+        }
+    }
+
+    @Test
+    fun `convenience method 'WithAllPropertiesRandomized' will not generate nulls and generates values for default types`() {
         val arbitraryInstances = (1..100).map {
             NullableAndDefaultValues::class.arbitraryInstanceWithAllPropertiesRandomized()
         }
