@@ -67,9 +67,21 @@ class InstanceCreatorTest {
     }
 
     @Test
+    fun `can generate kotlin nullable enums`() {
+        val kotlinNativeNullableEnums = KotlinNativeNullableEnums::class.arbitraryInstance()
+        println(kotlinNativeNullableEnums)
+    }
+
+    @Test
     fun `can generate Java enums`() {
         val javaEnums =  JavaEnums::class.arbitraryInstance()
         println(javaEnums)
+    }
+
+    @Test
+    fun `can generate Java nullable enums`() {
+        val javaNullableEnums =  JavaNullableEnums::class.arbitraryInstance()
+        println(javaNullableEnums)
     }
 
     @Test
@@ -82,6 +94,12 @@ class InstanceCreatorTest {
     fun `can generate lists of values`() {
         val listOfValues = ListOfValues::class.arbitraryInstance()
         println("listOfValues = $listOfValues")
+    }
+
+    @Test
+    fun `can generate nullable lists of values`() {
+        val nullableListOfValues = NullableListOfValues::class.arbitraryInstance()
+        println("nullableListOfValues = $nullableListOfValues")
     }
 
     @Test
@@ -103,8 +121,20 @@ class InstanceCreatorTest {
     }
 
     @Test
+    fun `can generate nullable sets`() {
+        val instance = NullableSetOfValues::class.arbitraryInstance()
+        println(instance)
+    }
+
+    @Test
     fun `will supply lists if asked to generate a 'collection'`() {
         val instance = CollectionOfValues::class.arbitraryInstance()
+        println(instance)
+    }
+
+    @Test
+    fun `will supply lists if asked to generate a 'nullable collection'`() {
+        val instance = NullableCollectionOfValues::class.arbitraryInstance()
         println(instance)
     }
 
@@ -112,6 +142,12 @@ class InstanceCreatorTest {
     fun `can generate maps`() {
         val instance = MapsOfDtos::class.arbitraryInstance()
         println(instance)
+    }
+
+    @Test
+    fun `can generate nullable map of values`() {
+        val nullableMapOfValues = NullableMapOfDtos::class.arbitraryInstance()
+        println("nullableMapOfValues = $nullableMapOfValues")
     }
 
     @Test
