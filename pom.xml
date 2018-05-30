@@ -22,7 +22,7 @@
 
     <groupId>com.tyro.oss</groupId>
     <artifactId>arbitrater</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.7-SNAPSHOT</version>
     <packaging>jar</packaging>
     <url>https://github.com/tyro/arbitrater</url>
     <description>A simple library to generate arbitrary instances of Kotlin classes</description>
