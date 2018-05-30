@@ -17,10 +17,7 @@
 package com.tyro.oss.arbitrater
 
 import com.tyro.oss.randomdata.RandomEnum
-import kotlin.reflect.KClass
-import kotlin.reflect.KParameter
-import kotlin.reflect.KType
-import kotlin.reflect.KTypeProjection
+import kotlin.reflect.*
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubtypeOf
 import kotlin.reflect.full.primaryConstructor
@@ -29,15 +26,10 @@ import kotlin.reflect.full.withNullability
 // TODO: Arrays?
 
 private val wildcardMapType = Map::class.createType(arguments = listOf(KTypeProjection.STAR, KTypeProjection.STAR))
-private val wildcardNullableMapType = Map::class.createType(arguments = listOf(KTypeProjection.STAR, KTypeProjection.STAR), nullable = true)
 private val wildcardCollectionType = Collection::class.createType(arguments = listOf(KTypeProjection.STAR))
-private val wildcardNullableCollectionType = Collection::class.createType(arguments = listOf(KTypeProjection.STAR), nullable = true)
 private val wildcardListType = List::class.createType(arguments = listOf(KTypeProjection.STAR))
-private val wildcardNullableListType = List::class.createType(arguments = listOf(KTypeProjection.STAR), nullable = true)
 private val wildcardSetType = Set::class.createType(arguments = listOf(KTypeProjection.STAR))
-private val wildcardNullableSetType = Set::class.createType(arguments = listOf(KTypeProjection.STAR), nullable = true)
 private val wildcardEnumType = Enum::class.createType(arguments = listOf(KTypeProjection.STAR))
-private val wildcardNullableEnumType = Enum::class.createType(arguments = listOf(KTypeProjection.STAR), nullable = true)
 
 class InstanceCreator<out T : Any>(private val targetClass: KClass<T>, settings: GeneratorSettings = GeneratorSettings())
     : ConfigurableArbitrater(settings, DefaultConfiguration.generators.toMutableMap()) {
@@ -92,11 +84,8 @@ class InstanceCreator<out T : Any>(private val targetClass: KClass<T>, settings:
             settings.generateNulls && isMarkedNullable -> null
             canGenerate(nonNullableType) -> generate(withNullability(false))
             isSubtypeOf(wildcardCollectionType) -> fillCollection(this)
-            isSubtypeOf(wildcardNullableCollectionType) -> fillCollection(this)
             isSubtypeOf(wildcardMapType) -> fillMap(this)
-            isSubtypeOf(wildcardNullableMapType) -> fillMap(this)
             isSubtypeOf(wildcardEnumType) -> RandomEnum.randomEnumValue((classifier as KClass<Enum<*>>).java)
-            isSubtypeOf(wildcardNullableEnumType) -> RandomEnum.randomEnumValue((classifier as KClass<Enum<*>>).java)
             classifier is KClass<*> -> InstanceCreator(classifier as KClass<*>, settings).createInstance()
             else -> TODO("No support for ${this}")
         }
@@ -117,11 +106,8 @@ class InstanceCreator<out T : Any>(private val targetClass: KClass<T>, settings:
 
         return when {
             collectionType.isSubtypeOf(wildcardListType) -> randomValues
-            collectionType.isSubtypeOf(wildcardNullableListType) -> randomValues
             collectionType.isSubtypeOf(wildcardSetType) -> randomValues.toSet()
-            collectionType.isSubtypeOf(wildcardNullableSetType) -> randomValues.toSet()
             collectionType.isSubtypeOf(wildcardCollectionType) -> randomValues
-            collectionType.isSubtypeOf(wildcardNullableCollectionType) -> randomValues
             else -> TODO("No support for $collectionType")
         }
     }

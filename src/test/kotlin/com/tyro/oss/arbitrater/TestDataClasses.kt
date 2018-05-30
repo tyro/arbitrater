@@ -26,23 +26,15 @@ import java.util.concurrent.TimeUnit
 
 data class MapsOfDtos(val map: Map<String, NestedClasses>)
 
-data class NullableMapOfDtos(val intList: Map<String, NestedClasses>?)
-
 data class ListOfNonNestedDataClasses(val dtoList: List<Numbers>)
 
 data class ListOfNestedDataClasses(val dtoList: List<NestedClasses>)
 
 data class ListOfValues(val intList: List<Int>)
 
-data class NullableListOfValues(val intList: List<Int>?)
-
 data class SetOfValues(val intList: Set<Int>)
 
-data class NullableSetOfValues(val intList: Set<Int>?)
-
 data class CollectionOfValues(val intCollection: Collection<Int>)
-
-data class NullableCollectionOfValues(val intCollection: Collection<Int>?)
 
 data class DefaultValue(val int: Int = 10)
 
@@ -82,11 +74,7 @@ data class UUIDs(val uuid: UUID)
 
 data class KotlinNativeEnums(val someEnum: SomeEnum)
 
-data class KotlinNativeNullableEnums(val someEnum: SomeEnum?)
-
 data class JavaEnums(val someJavaEnum: TimeUnit)
-
-data class JavaNullableEnums(val someJavaEnum: TimeUnit?)
 
 enum class SomeEnum {
     VALUE_1,
