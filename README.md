@@ -1,5 +1,9 @@
 # Arbitrater
 
+[![Download](https://maven-badges.herokuapp.com/maven-central/com.tyro.oss/arbitrater/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.tyro.oss/arbitrater)
+[![Build Status](https://travis-ci.org/tyro/arbitrater.svg?branch=master)](https://travis-ci.org/tyro/arbitrater)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+
 Arbitrater is a library for creating arbitrary instances of classes by reflection,
 for example to use in testing. It was designed primarily for use with Kotlin 'data classes', 
 but may work with regular classes too.
