@@ -37,7 +37,7 @@ Out of the box, Arbitrater can generate values for:
 * BigInteger, BigDecimal
 * String
 * UUID
-* LocalDate, LocalDateTime
+* LocalDate, LocalDateTime, Instant
 * Enums
 * Lists of any supported type
 * Sets of any supported type
