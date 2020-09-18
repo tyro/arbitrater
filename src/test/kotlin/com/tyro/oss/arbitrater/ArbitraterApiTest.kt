@@ -27,6 +27,11 @@ import org.junit.jupiter.api.Test
 class ArbitraterApiTest {
 
     @Test
+    fun `arbitrary instance`() {
+        arbitrary<DefaultValue>().int shouldNotBe null
+    }
+
+    @Test
     fun `nullable types generate values by default`() {
         val arbitraryInstance = NullableValue::class.arbitraryInstance()
         arbitraryInstance.date shouldNotBe null

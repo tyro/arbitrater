@@ -33,3 +33,8 @@ fun <T : Any> KClass<T>.arbitrater(): InstanceCreator<T> = InstanceCreator(this)
  * Convenience method that will generate an arbitrary instance with random values generated for nulls and for default values.
  */
 fun <T : Any> KClass<T>.arbitraryInstanceWithAllPropertiesRandomized(): T = InstanceCreator(this).generateNulls(false).useDefaultValues(false).createInstance()
+
+/**
+ * Convenience method for generating an arbitrary instance
+ */
+inline fun <reified T:Any> arbitrary() = T::class.arbitraryInstance()

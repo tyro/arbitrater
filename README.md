@@ -14,18 +14,17 @@ It is similar to libraries like [random-beans](https://github.com/benas/random-b
 ## Quick start
 
 ```kotlin
-    data class Order(val name: String, val quantity: Int = 1, val promotionCode: String?)
-    
-       
-    val defaultOrder = Order::class.arbitraryInstance()
-    println(defaultOrder) // Order(description=\VccV/esz{54[!FAU(a{, quantity=1, promotionCode=5b$`i1AsT54t[Hwf%W*&)    
-    
-    val customOrder = Order::class.arbitrater()
-            .generateNulls()
-            .useDefaultValues(false)
-            .createInstance()    
-            
-    println(customOrder) // Order(description= 5{L_vUnvMIJ!y]03*<c, quantity=513355083, promotionCode=null) 
+data class Order(val name: String, val quantity: Int = 1, val promotionCode: String?)
+
+val defaultOrder: Order = arbitrary()
+println(defaultOrder) // Order(description=\VccV/esz{54[!FAU(a{, quantity=1, promotionCode=5b$`i1AsT54t[Hwf%W*&)    
+
+val customOrder = Order::class.arbitrater()
+        .generateNulls()
+        .useDefaultValues(false)
+        .createInstance()    
+        
+println(customOrder) // Order(description= 5{L_vUnvMIJ!y]03*<c, quantity=513355083, promotionCode=null) 
 ```
 
 ## Features
