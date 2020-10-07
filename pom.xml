@@ -28,8 +28,8 @@
     <description>A simple library to generate arbitrary instances of Kotlin classes</description>
 
     <scm>
-        <connection>scm:git:https://github.com/tyro/arbitrater.git</connection>
-        <developerConnection>scm:git:https://github.com/tyro/arbitrater.git</developerConnection>
+        <connection>scm:git:git://github.com/tyro/arbitrater.git</connection>
+        <developerConnection>scm:git:git://github.com/tyro/arbitrater.git</developerConnection>
         <url>https://github.com/tyro/arbitrater</url>
         <tag>HEAD</tag>
     </scm>
