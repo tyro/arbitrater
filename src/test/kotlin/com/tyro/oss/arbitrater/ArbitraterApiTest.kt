@@ -16,13 +16,20 @@
 
 package com.tyro.oss.arbitrater
 
-import io.kotlintest.forAll
-import io.kotlintest.forAtLeast
-import io.kotlintest.matchers.shouldBe
-import io.kotlintest.matchers.shouldNotBe
-import org.junit.Test
+import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.collections.shouldNotContain
+import io.kotest.matchers.collections.shouldNotContainNoNulls
+import io.kotest.matchers.collections.shouldNotContainNull
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import org.junit.jupiter.api.Test
 
 class ArbitraterApiTest {
+
+    @Test
+    fun `arbitrary instance`() {
+        arbitrary<DefaultValue>().int shouldNotBe null
+    }
 
     @Test
     fun `nullable types generate values by default`() {
@@ -45,9 +52,7 @@ class ArbitraterApiTest {
             DefaultValue::class.arbitraryInstance()
         }
 
-        forAll(arbitraryInstances) { instance ->
-            instance.int shouldBe 10
-        }
+        arbitraryInstances.map { it.int }.shouldContainAll(10)
     }
 
     @Test
@@ -58,9 +63,7 @@ class ArbitraterApiTest {
                     .createInstance()
         }
 
-        forAtLeast(1, arbitraryInstances) { instance ->
-            instance.int shouldNotBe 10
-        }
+        arbitraryInstances shouldNotContain DefaultValue(10)
     }
 
     @Test
@@ -72,13 +75,8 @@ class ArbitraterApiTest {
                     .createInstance()
         }
 
-        forAtLeast(1, instances) {
-            it.defaultValue.int shouldNotBe 10
-        }
-
-        forAll(instances) {
-            it.nullableValue.date shouldBe null
-        }
+        instances.map { it.defaultValue.int } shouldNotContain 10
+        instances.map { it.nullableValue.date }.shouldNotContainNoNulls()
     }
 
     @Test
@@ -87,12 +85,7 @@ class ArbitraterApiTest {
             NullableAndDefaultValues::class.arbitraryInstanceWithAllPropertiesRandomized()
         }
 
-        forAtLeast(1, arbitraryInstances) { instance ->
-            instance.int shouldNotBe 10
-        }
-
-        forAll(arbitraryInstances) { instance ->
-            instance.date shouldNotBe null
-        }
+        arbitraryInstances.map { it.int } shouldNotContain 10
+        arbitraryInstances.map { it.date }.shouldNotContainNull()
     }
 }

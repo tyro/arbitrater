@@ -16,11 +16,10 @@
 
 package com.tyro.oss.arbitrater
 
-import org.junit.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
-import kotlin.test.assertNull
-import kotlin.test.fail
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import org.junit.jupiter.api.Test
 
 class InstanceCreatorTest {
 
@@ -74,13 +73,13 @@ class InstanceCreatorTest {
 
     @Test
     fun `can generate Java enums`() {
-        val javaEnums =  JavaEnums::class.arbitraryInstance()
+        val javaEnums = JavaEnums::class.arbitraryInstance()
         println(javaEnums)
     }
 
     @Test
     fun `can generate Java nullable enums`() {
-        val javaNullableEnums =  JavaNullableEnums::class.arbitraryInstance()
+        val javaNullableEnums = JavaNullableEnums::class.arbitraryInstance()
         println(javaNullableEnums)
     }
 
@@ -155,8 +154,8 @@ class InstanceCreatorTest {
         val specificValue = "Tyro"
         val instance = TestClass::class.arbitrater().withValue("property1", specificValue).createInstance()
 
-        assertEquals(specificValue, instance.property1)
-        assertNotEquals(specificValue, instance.property2)
+        instance.property1 shouldBe specificValue
+        instance.property2 shouldNotBe specificValue
     }
 
     @Test
@@ -164,18 +163,14 @@ class InstanceCreatorTest {
         val specificValue: String? = null
         val instance = TestClass::class.arbitrater().withValue("property1", specificValue).createInstance()
 
-        assertNull(instance.property1)
-        assertNotEquals(specificValue, instance.property2)
+        instance.property1 shouldBe null
+        instance.property2 shouldNotBe specificValue
     }
 
     @Test
     fun `should throw straight away if name is not a constructor param`() {
-        val specificValue = "Tyro"
-        try {
-            NestingTestClass::class.arbitrater().withValue("property7", specificValue)
-            fail("Should have thrown IAE")
-        } catch (e: IllegalArgumentException) {
-            // expected
+        shouldThrow<IllegalArgumentException> {
+            NestingTestClass::class.arbitrater().withValue("property7", "Tyro")
         }
     }
 
@@ -184,8 +179,8 @@ class InstanceCreatorTest {
         val specificValue = "Tyro"
         val instance = NestingTestClass::class.arbitrater().withValue("property1", specificValue).createInstance()
 
-        assertEquals(specificValue, instance.property1)
-        assertNotEquals(specificValue, instance.nested.property1)
+        instance.property1 shouldBe specificValue
+        instance.nested.property1 shouldNotBe specificValue
     }
 
     @Test
@@ -194,19 +189,19 @@ class InstanceCreatorTest {
         val instance1 = TestClass::class.arbitrater().withValue("property1", specificValue).createInstance()
         val instance2 = TestClass::class.arbitrater().createInstance()
 
-        assertEquals(specificValue, instance1.property1)
-        assertNotEquals(specificValue, instance2.property1)
+        instance1.property1 shouldBe specificValue
+        instance2.property1 shouldNotBe specificValue
     }
 
     @Test
     fun `can use a specific parameter value that's not a property`() {
         val instance = ClassWithoutConstructorProperty::class.arbitrater().withValue("name", "Boy").createInstance()
-        assertEquals("Big Boy", instance.bigName)
+        instance.bigName shouldBe "Big Boy"
     }
 }
 
 class TestClass(val property1: String?, val property2: String)
 class NestingTestClass(val nested: TestClass, val property1: String)
 class ClassWithoutConstructorProperty(name: String) {
-    val bigName = "Big " + name
+    val bigName = "Big $name"
 }

@@ -46,6 +46,7 @@ object DefaultConfiguration : ConfigurableArbitrater() {
         registerGenerator(RandomLocalDate::randomLocalDate)
         registerGenerator(RandomLocalDateTime::randomLocalDateTime)
         registerGenerator(RandomZonedDateTime::randomZonedDateTime)
+        registerGenerator { RandomZonedDateTime.randomZonedDateTime().toInstant() }
         registerGenerator(UUID::randomUUID)
         registerGenerator { BigInteger.valueOf(random.nextLong()) }
         registerGenerator { BigDecimal.valueOf(random.nextDouble()) }

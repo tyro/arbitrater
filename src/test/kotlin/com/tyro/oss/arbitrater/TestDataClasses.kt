@@ -18,6 +18,7 @@ package com.tyro.oss.arbitrater
 
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
@@ -55,7 +56,8 @@ data class NullableAndDefaultValues(val date: LocalDate? = null, val int: Int = 
 data class Dates(
         val localDate: LocalDate,
         val localDateTime: LocalDateTime,
-        val zonedDateTime: ZonedDateTime
+        val zonedDateTime: ZonedDateTime,
+        val instant: Instant
 )
 
 data class BigNumbers(
