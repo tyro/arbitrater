@@ -198,6 +198,40 @@ class InstanceCreatorTest {
         val instance = ClassWithoutConstructorProperty::class.arbitrater().withValue("name", "Boy").createInstance()
         instance.bigName shouldBe "Big Boy"
     }
+
+    @Test
+    fun `withValue should override default value when useDefaults is true`() {
+        // https://github.com/tyro/arbitrater/issues/8
+        val instance = DefaultValue::class.arbitrater()
+            .useDefaultValues(true)
+            .withValue("int", 11)
+            .createInstance()
+
+        instance.int shouldBe 11
+    }
+
+    @Test
+    fun `withValue should override default value when useDefaults is false and called BEFORE withValue`() {
+        // https://github.com/tyro/arbitrater/issues/8
+        val instance = DefaultValue::class.arbitrater()
+            .useDefaultValues(false)
+            .withValue("int", 11)
+            .createInstance()
+
+        instance.int shouldBe 11
+    }
+
+    @Test
+    fun `withValue should override default value when useDefaults is false and called AFTER withValue`() {
+        // https://github.com/tyro/arbitrater/issues/8
+        val instance = DefaultValue::class.arbitrater()
+            .withValue("int", 11)
+            .useDefaultValues(false)
+            .createInstance()
+
+        instance.int shouldBe 11
+    }
+
 }
 
 class TestClass(val property1: String?, val property2: String)
