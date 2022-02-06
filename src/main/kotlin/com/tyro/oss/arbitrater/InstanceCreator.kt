@@ -42,18 +42,22 @@ private val wildcardNullableEnumType = Enum::class.createType(arguments = listOf
 class InstanceCreator<out T : Any>(private val targetClass: KClass<T>, settings: GeneratorSettings = GeneratorSettings())
     : ConfigurableArbitrater(settings, DefaultConfiguration.generators.toMutableMap()) {
 
+    private constructor(targetClass: KClass<T>, specificValues: MutableMap<KParameter, Any?>, settings: GeneratorSettings) :this(targetClass, settings) {
+        this.specificValues.putAll(specificValues)
+    }
+
     private val specificValues: MutableMap<KParameter, Any?> = mutableMapOf()
 
-    fun generateNulls(value: Boolean = true): InstanceCreator<T> = InstanceCreator(targetClass, settings.copy(generateNulls = value))
+    fun generateNulls(value: Boolean = true): InstanceCreator<T> = InstanceCreator(targetClass, specificValues, settings.copy(generateNulls = value))
 
-    fun useDefaultValues(value: Boolean = false): InstanceCreator<T> = InstanceCreator(targetClass, settings.copy(useDefaultValues = value))
+    fun useDefaultValues(value: Boolean = false): InstanceCreator<T> = InstanceCreator(targetClass, specificValues, settings.copy(useDefaultValues = value))
 
     fun withValue(parameterName: String, value: Any?): InstanceCreator<T> {
         targetClass.primaryConstructor?.parameters?.find { it.name == parameterName }?.let {
             specificValues[it] = value
         } ?: throw IllegalArgumentException("Parameter named $parameterName not found in primary constructor of ${targetClass.simpleName}")
 
-        return this
+        return InstanceCreator(targetClass, specificValues, settings)
     }
 
     /**
@@ -66,10 +70,9 @@ class InstanceCreator<out T : Any>(private val targetClass: KClass<T>, settings:
             val primaryConstructor = targetClass.primaryConstructor!!
 
             val constructorArguments = primaryConstructor
-                    .parameters
-                    .filterNot { it.isOptional && settings.useDefaultValues }
-                    .map { it to (if(specificValues.containsKey(it)) specificValues[it] else it.type.randomValue()) }
-                    .toMap()
+                .parameters
+                .filterNot { it.isOptional && settings.useDefaultValues && !specificValues.containsKey(it) }
+                .associateWith { (if (specificValues.containsKey(it)) specificValues[it] else it.type.randomValue()) }
 
             return primaryConstructor.callBy(constructorArguments)
         } catch (e: Exception) {
