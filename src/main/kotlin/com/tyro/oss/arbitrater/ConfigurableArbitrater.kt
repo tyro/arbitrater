@@ -18,6 +18,7 @@ package com.tyro.oss.arbitrater
 
 import kotlin.reflect.KType
 import kotlin.reflect.full.withNullability
+import kotlin.reflect.jvm.ExperimentalReflectionOnLambdas
 import kotlin.reflect.jvm.reflect
 
 abstract class ConfigurableArbitrater(protected var settings: GeneratorSettings = GeneratorSettings(), generators: MutableMap<KType, () -> Any>  = mutableMapOf()) {
@@ -32,9 +33,20 @@ abstract class ConfigurableArbitrater(protected var settings: GeneratorSettings 
     /**
      * Register a custom type generator. Only one generator can be registered for a given type. Registering a type again will replace the previous generator.
      */
-    fun registerGenerator(generator: () -> Any) {
+    @ExperimentalReflectionOnLambdas
+    fun <T : Any> registerGenerator(generator: () -> T) {
         // Removing nullability so generators registered by passing in Java methods (with a platform type) will match up against a non-nullable Kotlin parameter declaration
-        val returnType = generator.reflect()!!.returnType.withNullability(false)
+        val returnType = findReturnTypeByReflection(generator).withNullability(false)
         _generators[returnType] = generator
     }
+
+    @OptIn(ExperimentalReflectionOnLambdas::class)
+    protected fun  <T> findReturnTypeByReflection(generator: () -> T): KType =
+        generator.reflect()?.returnType ?: generator.returnTypeFromCallableReference()
+
+    private fun <T> Function<T>.returnTypeFromCallableReference(): KType =
+        // As of Kotlin 1.4, Function.reflect() when called on a Java method reference returns 'null'.
+        // It becomes a CallableReference but this is an internal class we can't import use, but we can
+        // reflect on it to get at the return type this way!
+        javaClass.getMethod("getReturnType").invoke(this) as KType
 }
