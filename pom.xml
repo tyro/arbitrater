@@ -126,7 +126,7 @@
             <plugin>
                 <groupId>org.jetbrains.dokka</groupId>
                 <artifactId>dokka-maven-plugin</artifactId>
-                <version>0.10.1</version>
+                <version>1.6.10</version>
                 <executions>
                     <execution>
                         <phase>prepare-package</phase>
